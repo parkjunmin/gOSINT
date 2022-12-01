@@ -19,6 +19,7 @@ Currently `gOSINT` has different modules:
 - [x] git support for mail retriving (using github API, or plain clone and search)
 - [x] Search for mails, aliases and KeyID in PGP Server
 - [x] [haveibeenpwned.com/](http://haveibeenpwned.com/) search for mail in databreach
+- [x] [Criminalip](https://www.criminalip.io/) search
 - [x] Retrieve Telegram Public Group Message History
 - [x] Search for mail address in source
 - [x] [shodan.io](https://shodan.io) search
@@ -108,15 +109,25 @@ Commands:
   pgp <mail>...
     Get Emails, KeyID and Aliases from PGP Keyring
 
+  [<flags>] <host>...
+    Get info on host using criminalip.io
 
-  shodan [<flags>] <host>...
+    --new-scan  Schedule a new criminalip scan (1 criminalip Credit will be deducted)
+
+  criminalip-query <query>
+    Send a query to criminalip.io
+  
+  
+  [<flags>] <host>...
     Get info on host using shodan.io
 
     --new-scan  Schedule a new shodan scan (1 Shodan Credit will be deducted)
     --honeypot  Get honeypot probability
 
-  shodan-query <query>
-    Send a query to shodan.io
+  criminalip-query <query>
+    Send a query to criminalip.io
+
+
 
 
   axfr [<flags>] <url>...
