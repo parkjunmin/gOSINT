@@ -11,6 +11,7 @@ import (
 	"github.com/Nhoya/gOSINT/internal/pni"
 	"github.com/Nhoya/gOSINT/internal/reversewhois"
 	"github.com/Nhoya/gOSINT/internal/shodan"
+	"github.com/Nhoya/gOSINT/internal/criminalip"
 	"github.com/Nhoya/gOSINT/internal/telegram"
 	"github.com/Nhoya/gOSINT/internal/utils"
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -46,6 +47,15 @@ var (
 	shodanQMod  = app.Command("shodan-query", "Send a query to shodan.io")
 	shodanQuery = shodanQMod.Arg("query", "Shodan query").Required().String()
 
+	//criminalip.io scan module
+	criminalipMod      = app.Command("criminalip", "Get info on host using criminalip.io")
+	criminalipHosts    = criminalipMod.Arg("host", "Remote Host IP").Required().Strings()
+	criminalipNewScan  = criminalipMod.Flag("new-scan", "Schedule a new criminalip scan (1 criminalip Credit will be deducted)").Bool()
+	criminalipHoneyPot = criminalipMod.Flag("honeypot", "Get honeypot probability").Bool()
+	//criminalip.io query module
+	criminalipQMod  = app.Command("criminalip-query", "Send a query to criminalip.io")
+	criminalipQuery = criminalipQMod.Arg("query", "criminalip query").Required().String()
+	
 	//crt.sh module (subdomain enumeration)
 	axfrMod       = app.Command("axfr", "Subdomain enumeration using crt.sh")
 	axfrURLs      = axfrMod.Arg("url", "Domain URL").Required().Strings()
@@ -99,6 +109,18 @@ func main() {
 		opts.JSONFlag = *jsonFlag
 		opts.Targets = *pgpTargets
 		opts.StartPGP()
+	//gosint criminalip
+	case criminalipMod.FullCommand():
+		opts := new(criminalip.Options)
+		opts.Hosts = *criminalipHosts
+		opts.NewScan = *criminalipNewScan
+		opts.HoneyPotFlag = *criminalipHoneyPot
+		opts.StartcriminalipScan()
+	//gosint criminalip-query
+	case criminalipMod.FullCommand():
+		opts := new(criminalip.QueryOptions)
+		opts.Query = *criminalipQuery
+		opts.StartcriminalipQuery()
 	//gosint shodan
 	case shodanMod.FullCommand():
 		opts := new(shodan.Options)
